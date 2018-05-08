@@ -75,6 +75,7 @@ describe('TODOS api'.yellow, () => {
       .set('Accept', 'application/json')
       .end((err, resp) => {
         const todo = resp.body;
+        console.log(todo);
         request(app)
           .put(`/api/todos/${todo._id}`)
           .send({
@@ -83,7 +84,7 @@ describe('TODOS api'.yellow, () => {
           .expect('Content-Type', /json/)
           .expect(200)
           .end((err, resp) => {
-            expect(resp.body.name).to.deep.equal('Tester Tommy');
+            expect(resp.body.name).to.have.string('Tester Tommy');
             done();
           });
       });

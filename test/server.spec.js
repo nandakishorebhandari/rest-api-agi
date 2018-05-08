@@ -29,7 +29,7 @@ describe('TODOS api'.yellow, () => {
         expect(resp.body).to.be.an('array');
         done();
       });
-  }).timeout(100000);
+  }).timeout(5000);
 
   it('should post a todo', done => {
     request(app)
@@ -44,7 +44,7 @@ describe('TODOS api'.yellow, () => {
         expect(resp.body).to.be.an('object');
         done();
       });
-  }).timeout(50000);
+  }).timeout(5000);
 
   it('should get one todo', done => {
     request(app)
@@ -64,7 +64,7 @@ describe('TODOS api'.yellow, () => {
             done();
           });
       });
-  }).timeout(50000);
+  }).timeout(5000);
 
   it('should put a todo', done => {
     request(app)
@@ -87,7 +87,7 @@ describe('TODOS api'.yellow, () => {
             done();
           });
       });
-  }).timeout(50000);
+  }).timeout(5000);
 
   it('should delete a todo', done => {
     request(app)
@@ -107,6 +107,6 @@ describe('TODOS api'.yellow, () => {
             done();
           });
       });
-  }).timeout(50000);
+  }).timeout(5000);
 
 });

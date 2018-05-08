@@ -83,7 +83,7 @@ describe('TODOS api'.yellow, () => {
           .expect('Content-Type', /json/)
           .expect(200)
           .end((err, resp) => {
-            expect(resp.body.name).to.equal('Tester Tommy');
+            expect(resp.body.name).to.deep.equal('Tester Tommy');
             done();
           });
       });

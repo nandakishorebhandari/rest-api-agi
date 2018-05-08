@@ -5,6 +5,7 @@ const app = require('../server');
 const request = require('supertest');
 const expect = require('chai').expect;
 const Todo = require('../server/api/todo/todo-model');
+const logger = require('../server/util/logger');
 require('colors');
 
 /* eslint-disable no-undef */
@@ -14,7 +15,7 @@ describe('TODOS api'.yellow, () => {
   afterEach(() => {
     Todo.remove({}, err => {
       if (err) {
-        console.log('Error while cleaning the Test DB'.red);
+        logger.log('Error while cleaning the Test DB'.red);
       }
     });
   });
@@ -75,7 +76,6 @@ describe('TODOS api'.yellow, () => {
       .set('Accept', 'application/json')
       .end((err, resp) => {
         const todo = resp.body;
-        console.log(todo);
         request(app)
           .put(`/api/todos/${todo._id}`)
           .send({
@@ -84,7 +84,6 @@ describe('TODOS api'.yellow, () => {
           .expect('Content-Type', /json/)
           .expect(200)
           .end((err, resp) => {
-            console.log(resp.body);
             expect(resp.body.name).to.have.string('Tester Tommy');
             done();
           });

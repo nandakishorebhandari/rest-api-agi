@@ -83,9 +83,9 @@ describe('TODOS api'.yellow, () => {
           })
           .expect('Content-Type', /json/)
           .expect(200)
-          .end((err, resp) => {
-            console.log(resp.body);
-            expect(resp.body.name).to.have.string('Tester Tommy');
+          .end((err, newResp) => {
+            console.log(newResp.body);
+            expect(newResp.body.name).to.have.string('Tester Tommy');
             done();
           });
       });

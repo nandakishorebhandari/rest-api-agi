@@ -11,12 +11,11 @@ require('colors');
 
 describe('TODOS api'.yellow, () => {
 
-  afterEach(done => {
+  afterEach(() => {
     Todo.remove({}, err => {
       if (err) {
         console.log('Error while cleaning the Test DB'.red);
       }
-      done();
     });
   });
 
@@ -30,7 +29,7 @@ describe('TODOS api'.yellow, () => {
         expect(resp.body).to.be.an('array');
         done();
       });
-  });
+  }).timeout(10000);
 
   it('should post a todo', done => {
     request(app)
@@ -45,7 +44,7 @@ describe('TODOS api'.yellow, () => {
         expect(resp.body).to.be.an('object');
         done();
       });
-  });
+  }).timeout(5000);
 
   it('should get one todo', done => {
     request(app)
@@ -88,7 +87,7 @@ describe('TODOS api'.yellow, () => {
             done();
           });
       });
-  });
+  }).timeout(5000);
 
   it('should delete a todo', done => {
     request(app)
@@ -108,6 +107,6 @@ describe('TODOS api'.yellow, () => {
             done();
           });
       });
-  });
+  }).timeout(5000);
 
 });

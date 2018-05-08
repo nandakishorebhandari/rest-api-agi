@@ -1,0 +1,31 @@
+{
+  "name": "node-api-design",
+  "version": "0.0.1",
+  "description": "creating a restful api in node",
+  "main": "index.js",
+  "scripts": {
+    "start": "node ./index.js",
+    "test": "mocha --exit ./test/"
+  },
+  "keywords": [
+    "node",
+    "express",
+    "rest"
+  ],
+  "author": "radlinskii",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "colors": "^1.2.4",
+    "express": "^4.16.3",
+    "lodash": "^4.17.10",
+    "mongoose": "^5.0.17",
+    "morgan": "^1.9.0"
+  },
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "dotenv": "^5.0.1",
+    "mocha": "^5.1.1",
+    "supertest": "^3.0.0"
+  }
+}

@@ -5,7 +5,6 @@ const app = require('../server');
 const request = require('supertest');
 const expect = require('chai').expect;
 const Todo = require('../server/api/todo/todo-model');
-const logger = require('../server/util/logger');
 require('colors');
 
 /* eslint-disable no-undef */
@@ -15,7 +14,7 @@ describe('TODOS api'.yellow, () => {
   afterEach(() => {
     Todo.remove({}, err => {
       if (err) {
-        logger.log('Error while cleaning the Test DB'.red);
+        console.log('Error while cleaning the Test DB'.red);
       }
     });
   });

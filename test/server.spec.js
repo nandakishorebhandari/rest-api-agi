@@ -11,11 +11,12 @@ require('colors');
 
 describe('TODOS api'.yellow, () => {
 
-  afterEach(() => {
+  afterEach(done => {
     Todo.remove({}, err => {
       if (err) {
         console.log('Error while cleaning the Test DB'.red);
       }
+      done();
     });
   });
 

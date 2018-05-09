@@ -3,7 +3,7 @@ const cors = require('cors');
 const mockedMorgan = require('./mocked-morgan-middleware');
 const config = require('../config');
 
-module.exports = function (app) {
+module.exports = app => {
   if (config.logging) {
     const morgan = require('morgan');
     app.use(morgan('dev'));

@@ -11,7 +11,7 @@ require('mongoose')
     logger.log('db connected\n'.green);
   })
   .catch(err => {
-    logger.log(`db error: ${err}\n`.red);
+    logger.error(`${err}\n`);
   });
 
 require('./middleware/app-middleware')(app);

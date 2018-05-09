@@ -11,10 +11,17 @@ require('colors');
 
 describe('TODOS api'.yellow, () => {
 
+  const mockTodo = {
+    title: 'Write Better Tests',
+    description: 'I got to learn how to write better Tests',
+    duration: 10000,
+    date: 'Wed May 09 2018 19:36:31 GMT+0200 (CEST)',
+  };
+
   afterEach(() => {
     Todo.remove({}, err => {
       if (err) {
-        console.log('Error while cleaning the Test DB'.red);
+        console.error('Error while cleaning the Test DB'.red);
       }
     });
   });
@@ -34,14 +41,15 @@ describe('TODOS api'.yellow, () => {
   it('should post a todo', done => {
     request(app)
       .post('/api/todos')
-      .send({
-        name: 'Tester Tommy',
-      })
+      .send(mockTodo)
       .set('Accept', 'application/json')
       .expect('Content-Type', /json/)
       .expect(200)
       .end((err, resp) => {
         expect(resp.body).to.be.an('object');
+        expect(resp.body.title).to.equal(mockTodo.title);
+        expect(resp.body.description).to.equal(mockTodo.description);
+        expect(resp.body.duration).to.equal(mockTodo.duration);
         done();
       });
   }).timeout(5000);
@@ -49,9 +57,7 @@ describe('TODOS api'.yellow, () => {
   it('should get one todo', done => {
     request(app)
       .post('/api/todos')
-      .send({
-        name: 'Tester Tommy',
-      })
+      .send(mockTodo)
       .set('Accept', 'application/json')
       .end((err, resp) => {
         const todo = resp.body;
@@ -61,6 +67,9 @@ describe('TODOS api'.yellow, () => {
           .expect(200)
           .end((err, resp) => {
             expect(resp.body).to.be.an('object');
+            expect(resp.body.title).to.equal(mockTodo.title);
+            expect(resp.body.description).to.equal(mockTodo.description);
+            expect(resp.body.duration).to.equal(mockTodo.duration);
             done();
           });
       });
@@ -69,21 +78,22 @@ describe('TODOS api'.yellow, () => {
   it('should put a todo', done => {
     request(app)
       .post('/api/todos')
-      .send({
-        name: 'Tester Timmy',
-      })
+      .send(mockTodo)
       .set('Accept', 'application/json')
       .end((err, resp) => {
         const todo = resp.body;
+        const updatedData = {
+          title: 'Write Even Better Tests',
+        };
         request(app)
           .put(`/api/todos/${todo._id}`)
-          .send({
-            name: 'Tester Tommy',
-          })
+          .send(updatedData)
           .expect('Content-Type', /json/)
           .expect(200)
           .end((err, newResp) => {
-            expect(newResp.body.name).to.have.string('Tester Tommy');
+            expect(newResp.body.title).to.equal(updatedData.title);
+            expect(resp.body.description).to.equal(mockTodo.description);
+            expect(resp.body.duration).to.equal(mockTodo.duration);
             done();
           });
       });
@@ -92,9 +102,7 @@ describe('TODOS api'.yellow, () => {
   it('should delete a todo', done => {
     request(app)
       .post('/api/todos')
-      .send({
-        name: 'Tester Tommy',
-      })
+      .send(mockTodo)
       .set('Accept', 'application/json')
       .end((err, resp) => {
         const todo = resp.body;
@@ -104,6 +112,9 @@ describe('TODOS api'.yellow, () => {
           .expect(200)
           .end((err, resp) => {
             expect(resp.body).to.be.an('object');
+            expect(resp.body.title).to.equal(mockTodo.title);
+            expect(resp.body.description).to.equal(mockTodo.description);
+            expect(resp.body.duration).to.equal(mockTodo.duration);
             done();
           });
       });

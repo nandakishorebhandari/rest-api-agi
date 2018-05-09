@@ -1,19 +1,15 @@
 {
-  "name": "node-api-design",
-  "version": "0.0.1",
-  "description": "creating a restful api in node",
+  "name": "rest-api-agi",
+  "version": "0.2.0",
+  "description": "RESTful api in node.js for a ToDo application",
   "main": "index.js",
   "scripts": {
-    "start": "node ./index.js",
-    "test": "mocha --exit ./test/"
+    "start": "node index.js",
+    "test": "mocha --exit test"
   },
-  "keywords": [
-    "node",
-    "express",
-    "rest"
-  ],
-  "author": "radlinskii",
-  "license": "ISC",
+  "directories": {
+    "test": "test"
+  },
   "dependencies": {
     "body-parser": "^1.18.2",
     "colors": "^1.2.4",
@@ -28,5 +24,22 @@
     "dotenv": "^5.0.1",
     "mocha": "^5.1.1",
     "supertest": "^3.0.0"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/radlinskii/rest-api-agi.git"
+  },
+  "bugs": {
+    "url": "https://github.com/radlinskii/rest-api-agi/issues"
+  },
+  "homepage": "https://github.com/radlinskii/rest-api-agi#readme",
+  "keywords": [
+    "node",
+    "express",
+    "rest",
+    "restful",
+    "api"
+  ],
+  "author": "radlinskii",
+  "license": "MIT"
 }

@@ -1,8 +1,8 @@
 const express = require('express');
 const app = express();
 const api = require('./api');
-const config = require('./config');
 const logger = require('./util/logger');
+const config = require('./config');
 const errorHandler = require('./middleware/error-middleware');
 
 require('mongoose')

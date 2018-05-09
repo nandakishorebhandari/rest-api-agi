@@ -25,7 +25,7 @@ const logger = {
       .map(arg => {
         arg = arg.stack || arg;
         const name = arg.name || '[ ❌ ERROR ❌ ]';
-        return `${name.yellow}  ${arg.red}`;
+        return `${name.bgYellow}  ${arg.red}`;
       });
 
     consoleLog.apply(console, args);

@@ -8,7 +8,7 @@ const errorHandler = require('./middleware/error-middleware');
 require('mongoose')
   .connect(config.db.url)
   .then(() => {
-    logger.log('db connected\n'.green);
+    logger.log('db connected\n'.cyan);
   })
   .catch(err => {
     logger.error(`${err}\n`);

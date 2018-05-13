@@ -24,7 +24,7 @@ const get = (req, res, next) => {
     });
 };
 
-const getOne = (req, res, next) => {
+const getOne = (req, res) => {
   const todo = req.todo;
   res.json(todo);
 };

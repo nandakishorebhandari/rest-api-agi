@@ -1,6 +1,6 @@
 {
   "name": "rest-api-agi",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "RESTful api in node.js for a ToDo application",
   "main": "index.js",
   "scripts": {

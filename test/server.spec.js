@@ -5,17 +5,24 @@ const app = require('../server');
 const request = require('supertest');
 const expect = require('chai').expect;
 const Todo = require('../server/api/todo/todo-model');
+const User = require('../server/api/user/user-model');
 require('colors');
 
 /* eslint-disable no-undef */
 
 describe('TODOS api'.yellow, () => {
 
+  const userDraft = new User({
+    username: 'TesterTimmy',
+    password: 'test123',
+  });
+
   const mockTodo = {
     title: 'Write Better Tests',
     description: 'I got to learn how to write better Tests',
     duration: 10000,
     date: 'Wed May 09 2018 19:36:31 GMT+0200 (CEST)',
+    author: userDraft._id,
   };
 
   afterEach(() => {
@@ -50,6 +57,7 @@ describe('TODOS api'.yellow, () => {
         expect(resp.body.title).to.equal(mockTodo.title);
         expect(resp.body.description).to.equal(mockTodo.description);
         expect(resp.body.duration).to.equal(mockTodo.duration);
+        expect(resp.body.author).to.equal(mockTodo.author.toString());
         done();
       });
   }).timeout(5000);
@@ -70,6 +78,7 @@ describe('TODOS api'.yellow, () => {
             expect(resp.body.title).to.equal(mockTodo.title);
             expect(resp.body.description).to.equal(mockTodo.description);
             expect(resp.body.duration).to.equal(mockTodo.duration);
+            expect(resp.body.author).to.equal(mockTodo.author.toString());
             done();
           });
       });
@@ -91,9 +100,11 @@ describe('TODOS api'.yellow, () => {
           .expect('Content-Type', /json/)
           .expect(200)
           .end((err, newResp) => {
+            expect(resp.body).to.be.an('object');
             expect(newResp.body.title).to.equal(updatedData.title);
             expect(resp.body.description).to.equal(mockTodo.description);
             expect(resp.body.duration).to.equal(mockTodo.duration);
+            expect(resp.body.author).to.equal(mockTodo.author.toString());
             done();
           });
       });
@@ -115,6 +126,115 @@ describe('TODOS api'.yellow, () => {
             expect(resp.body.title).to.equal(mockTodo.title);
             expect(resp.body.description).to.equal(mockTodo.description);
             expect(resp.body.duration).to.equal(mockTodo.duration);
+            expect(resp.body.author).to.equal(mockTodo.author.toString());
+            done();
+          });
+      });
+  }).timeout(5000);
+
+});
+
+describe('USERS api'.yellow, () => {
+
+  const mockUser = {
+    username: 'Tester Timmy',
+    password: 'test123',
+  };
+
+  afterEach(() => {
+    User.remove({}, err => {
+      if (err) {
+        console.error('Error while cleaning the Test DB'.red);
+      }
+    });
+  });
+
+  it('should get all users', done => {
+    request(app)
+      .get('/api/users')
+      .set('Accept', 'application/json')
+      .expect('Content-Type', /json/)
+      .expect(200)
+      .end((err, resp) => {
+        expect(resp.body).to.be.an('array');
+        done();
+      });
+  }).timeout(5000);
+
+  it('should post a user', done => {
+    request(app)
+      .post('/api/users')
+      .send(mockUser)
+      .set('Accept', 'application/json')
+      .expect('Content-Type', /json/)
+      .expect(200)
+      .end((err, resp) => {
+        expect(resp.body).to.be.an('object');
+        expect(resp.body.username).to.equal(mockUser.username);
+        expect(resp.body.password).to.equal(mockUser.password);
+        done();
+      });
+  }).timeout(5000);
+
+  it('should get one user', done => {
+    request(app)
+      .post('/api/users')
+      .send(mockUser)
+      .set('Accept', 'application/json')
+      .end((err, resp) => {
+        const user = resp.body;
+        request(app)
+          .get(`/api/users/${user._id}`)
+          .expect('Content-Type', /json/)
+          .expect(200)
+          .end((err, resp) => {
+            expect(resp.body).to.be.an('object');
+            expect(resp.body.username).to.equal(mockUser.username);
+            expect(resp.body.password).to.equal(mockUser.password);
+            done();
+          });
+      });
+  }).timeout(5000);
+
+  it('should put a user', done => {
+    request(app)
+      .post('/api/users')
+      .send(mockUser)
+      .set('Accept', 'application/json')
+      .end((err, resp) => {
+        const user = resp.body;
+        const updatedData = {
+          username: 'TesterTommy',
+        };
+        request(app)
+          .put(`/api/users/${user._id}`)
+          .send(updatedData)
+          .expect('Content-Type', /json/)
+          .expect(200)
+          .end((err, newResp) => {
+            expect(resp.body).to.be.an('object');
+            expect(newResp.body.username).to.equal(updatedData.username);
+            expect(resp.body.password).to.equal(mockUser.password);
+            done();
+          });
+      });
+  }).timeout(5000);
+
+  it('should delete a user', done => {
+    request(app)
+      .post('/api/users')
+      .send(mockUser)
+      .set('Accept', 'application/json')
+      .end((err, resp) => {
+        const user = resp.body;
+        request(app)
+          .delete(`/api/users/${user._id}`)
+          .expect('Content-Type', /json/)
+          .expect(200)
+          .end((err, resp) => {
+            expect(resp.body).to.be.an('object');
+            expect(resp.body.username).to.equal(mockUser.username);
+            expect(resp.body.password).to.equal(mockUser.password);
             done();
           });
       });

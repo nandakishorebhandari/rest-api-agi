@@ -8,10 +8,10 @@ module.exports = app => {
     const morgan = require('morgan');
     app.use(morgan('dev'));
   }
+  app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({
     extended: true,
   }));
-  app.use(bodyParser.json());
   app.use(mockedMorgan);
   app.use(cors());
 };

@@ -1,17 +1,19 @@
 const express = require('express');
-const app = express();
-const api = require('./api');
-const logger = require('./util/logger');
 const config = require('./config');
+const api = require('./api');
 const errorHandler = require('./middleware/error-middleware');
+const { successLog, errorLog, } = require('../util/logger');
+
+const app = express();
 
 require('mongoose')
   .connect(config.db.url)
   .then(() => {
-    logger.log('db connected\n'.cyan);
+    console.log(successLog('db connected'));
+    console.log();
   })
   .catch(err => {
-    logger.error(`${err}\n`);
+    console.error(errorLog(`${err}\n`));
   });
 
 require('./middleware/app-middleware')(app);

@@ -1,9 +1,8 @@
-const logger = require('../util/logger');
-const colors = require('colors/safe');
+const { infoLog, } = require('../../util/logger');
 
 module.exports = (req, res, next) => {
-  logger.log();
-  logger.log('req.body:'.blue);
-  logger.log(colors.blue(req.body));
+  console.log();
+  console.log(infoLog('req.body:'));
+  console.log(req.body);
   next();
 };

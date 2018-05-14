@@ -1,16 +1,16 @@
 require('dotenv').config();
 process.env.NODE_ENV = 'testing';
 
-const app = require('../server');
-const request = require('supertest');
 const expect = require('chai').expect;
+const request = require('supertest');
+const app = require('../server');
 const Todo = require('../server/api/todo/todo-model');
 const User = require('../server/api/user/user-model');
-require('colors');
+const { infoLog, errorLog, } = require('../util/logger');
 
 /* eslint-disable no-undef */
 
-describe('TODOS api'.yellow, () => {
+describe(infoLog('TODOS api'), () => {
 
   const userDraft = new User({
     username: 'TesterTimmy',
@@ -28,7 +28,7 @@ describe('TODOS api'.yellow, () => {
   afterEach(() => {
     Todo.remove({}, err => {
       if (err) {
-        console.error('Error while cleaning the Test DB'.red);
+        console.error(errorLog('Error while cleaning the Test DB'));
       }
     });
   });
@@ -134,7 +134,7 @@ describe('TODOS api'.yellow, () => {
 
 });
 
-describe('USERS api'.yellow, () => {
+describe(infoLog('USERS api'), () => {
 
   const mockUser = {
     username: 'Tester Timmy',
@@ -144,7 +144,7 @@ describe('USERS api'.yellow, () => {
   afterEach(() => {
     User.remove({}, err => {
       if (err) {
-        console.error('Error while cleaning the Test DB'.red);
+        console.error(errorLog('Error while cleaning the Test DB'));
       }
     });
   });

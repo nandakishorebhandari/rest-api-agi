@@ -1,8 +1,8 @@
-const logger = require('../util/logger');
+const { errorLog, } = require('../../util/logger');
 
 module.exports = (error, req, res, next) => {
   if (error !== null) {
-    logger.error(error.message);
+    console.error(errorLog(error.message));
     res.status(500).send(error);
   }
 };

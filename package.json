@@ -11,10 +11,12 @@
     "test": "test"
   },
   "dependencies": {
+    "bcrypt": "^2.0.1",
     "body-parser": "^1.18.2",
     "chalk": "^2.4.1",
     "cors": "^2.8.4",
     "express": "^4.16.3",
+    "express-jwt": "^5.3.1",
     "jsonwebtoken": "^8.2.1",
     "lodash": "^4.17.10",
     "mongoose": "^5.0.17",

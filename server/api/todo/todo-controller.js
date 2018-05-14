@@ -3,6 +3,8 @@ const _ = require('lodash');
 
 const params = (req, res, next, id) => {
   Todo.findById(id)
+    .populate('author')
+    .exec()
     .then(todo => {
       if (!todo) {
         next(new Error('No todo with that id'));
@@ -17,6 +19,8 @@ const params = (req, res, next, id) => {
 
 const get = (req, res, next) => {
   Todo.find({})
+    .populate('author')
+    .exec()
     .then(todos => {
       res.json(todos);
     }, err => {

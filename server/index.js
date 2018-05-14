@@ -1,6 +1,7 @@
 const express = require('express');
 const config = require('./config');
 const api = require('./api');
+const auth = require('./auth/routes');
 const errorHandler = require('./middleware/error-middleware');
 const { successLog, errorLog, } = require('./utils/logger');
 
@@ -19,6 +20,7 @@ require('mongoose')
 require('./middleware/app-middleware')(app);
 
 app.use('/api', api);
+app.use('/auth', auth);
 
 app.use(errorHandler);
 

@@ -2,7 +2,7 @@ const express = require('express');
 const config = require('./config');
 const api = require('./api');
 const errorHandler = require('./middleware/error-middleware');
-const { successLog, errorLog, } = require('../util/logger');
+const { successLog, errorLog, } = require('./utils/logger');
 
 const app = express();
 

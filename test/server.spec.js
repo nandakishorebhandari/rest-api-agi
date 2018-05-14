@@ -6,7 +6,7 @@ const request = require('supertest');
 const app = require('../server');
 const Todo = require('../server/api/todo/todo-model');
 const User = require('../server/api/user/user-model');
-const { infoLog, errorLog, } = require('../util/logger');
+const { infoLog, errorLog, } = require('../server/utils/logger');
 
 /* eslint-disable no-undef */
 

@@ -4,7 +4,7 @@ const signToken = require('../../auth/auth').signToken;
 
 const params = async (req, res, next, id) => {
   try {
-    const user = await User.findById(id);
+    const user = await User.findById(id).select('-password').exec();
     if (!user) {
       next(new Error('No user with that id'));
     } else {
@@ -18,8 +18,8 @@ const params = async (req, res, next, id) => {
 
 const get = async (req, res, next) => {
   try {
-    const users = await User.find({});
-    res.json(users);
+    const users = await User.find({}).select('-password').exec();
+    res.json(users.map(user => user.toJson()));
   } catch (error) {
     next(error);
   }
@@ -27,7 +27,7 @@ const get = async (req, res, next) => {
 
 const getOne = (req, res) => {
   const user = req.user;
-  res.json(user);
+  res.json(user.toJson());
 };
 
 const post = async (req, res, next) => {
@@ -49,7 +49,7 @@ const put = async (req, res, next) => {
 
   try {
     const saved = await user.save();
-    res.json(saved);
+    res.json(saved.toJson());
   } catch (error) {
     next(error);
   }
@@ -58,10 +58,14 @@ const put = async (req, res, next) => {
 const deleteOne = async (req, res, next) => {
   try {
     const removed = await req.user.remove();
-    res.json(removed);
+    res.json(removed.toJson());
   } catch (error) {
     next(error);
   }
+};
+
+const me = (req, res) => {
+  res.json(req.user.toJson());
 };
 
 module.exports = {
@@ -71,4 +75,5 @@ module.exports = {
   post: post,
   put: put,
   delete: deleteOne,
+  me: me,
 };

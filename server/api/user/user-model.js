@@ -15,22 +15,19 @@ const UserSchema = new Schema({
   },
 });
 
-// middleware that will run before a document
-// is created
 UserSchema.pre('save', function(next) {
-
-  if (!this.isModified('password')) return next();
+  if (!this.isModified('password')) {
+    return next();
+  }
   this.password = this.encryptPassword(this.password);
   next();
 });
 
 
 UserSchema.methods = {
-  // check the passwords on signin
   authenticate: function(plainTextPword) {
     return bcrypt.compareSync(plainTextPword, this.password);
   },
-  // hash the passwords
   encryptPassword: function(plainTextPword) {
     if (!plainTextPword) {
       return '';
@@ -39,7 +36,11 @@ UserSchema.methods = {
       return bcrypt.hashSync(plainTextPword, salt);
     }
   },
+  toJson: function() {
+    const obj = this.toObject();
+    delete obj.password;
+    return obj;
+  },
 };
-
 
 module.exports = mongoose.model('user', UserSchema);

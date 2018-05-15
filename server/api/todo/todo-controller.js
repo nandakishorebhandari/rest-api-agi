@@ -3,7 +3,7 @@ const _ = require('lodash');
 
 const params = async (req, res, next, id) => {
   try {
-    const todo = await Todo.findById(id).populate('author').exec();
+    const todo = await Todo.findById(id).populate('author', 'username').exec();
     if (!todo) {
       next(new Error('No todo with that id'));
     } else {
@@ -17,7 +17,7 @@ const params = async (req, res, next, id) => {
 
 const get = async (req, res, next) => {
   try {
-    const todos = await Todo.find({}).populate('authors').exec();
+    const todos = await Todo.find({}).populate('author', 'username').exec();
     res.json(todos);
   } catch (error) {
     next(error);
@@ -31,6 +31,7 @@ const getOne = (req, res) => {
 
 const post = async (req, res, next) => {
   const newTodo = req.body;
+  newTodo.author = req.user._id;
   try {
     const todo = await Todo.create(newTodo);
     res.json(todo);

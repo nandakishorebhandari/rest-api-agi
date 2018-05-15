@@ -7,6 +7,9 @@
   "extends": [
     "eslint:recommended"
   ],
+  "parserOptions": {
+    "ecmaVersion":8
+  },
   "rules": {
     "indent": [
       "error",
@@ -33,7 +36,8 @@
       "always"
     ],
     "prefer-const": [
-      "error", {
+      "error",
+      {
         "destructuring": "any",
         "ignoreReadBeforeAssign": false
       }

@@ -2,27 +2,27 @@ const User = require('./user-model');
 const _ = require('lodash');
 const signToken = require('../../auth/auth').signToken;
 
-const params = (req, res, next, id) => {
-  User.findById(id)
-    .then(user => {
-      if (!user) {
-        next(new Error('No user with that id'));
-      } else {
-        req.user = user;
-        next();
-      }
-    }, err => {
-      next(err);
-    });
+const params = async (req, res, next, id) => {
+  try {
+    const user = await User.findById(id);
+    if (!user) {
+      next(new Error('No user with that id'));
+    } else {
+      req.user = user;
+      next();
+    }
+  } catch (error) {
+    next(error);
+  }
 };
 
-const get = (req, res, next) => {
-  User.find({})
-    .then(users => {
-      res.json(users);
-    }, err => {
-      next(err);
-    });
+const get = async (req, res, next) => {
+  try {
+    const users = await User.find({});
+    res.json(users);
+  } catch (error) {
+    next(error);
+  }
 };
 
 const getOne = (req, res) => {
@@ -30,39 +30,38 @@ const getOne = (req, res) => {
   res.json(user);
 };
 
-const post = (req, res, next) => {
+const post = async (req, res, next) => {
   const newUser = new User(req.body);
-
-  newUser.save()
-    .then(user => {
-      const token = signToken(user._id);
-      res.json({ token, });
-    }, err => {
-      next(err);
-    });
+  try {
+    const saved = await newUser.save();
+    const token = signToken(saved._id);
+    res.json({ token, });
+  } catch (error) {
+    next(error);
+  }
 };
 
-const put = (req, res, next) => {
+const put = async (req, res, next) => {
   const user = req.user;
   const update = req.body;
 
   _.merge(user, update);
 
-  user.save()
-    .then(saved => {
-      res.json(saved);
-    }, err => {
-      next(err);
-    });
+  try {
+    const saved = await user.save();
+    res.json(saved);
+  } catch (error) {
+    next(error);
+  }
 };
 
-const deleteOne = (req, res, next) => {
-  req.user.remove()
-    .then(removed => {
-      res.json(removed);
-    }, err => {
-      next(err);
-    });
+const deleteOne = async (req, res, next) => {
+  try {
+    const removed = await req.user.remove();
+    res.json(removed);
+  } catch (error) {
+    next(error);
+  }
 };
 
 module.exports = {

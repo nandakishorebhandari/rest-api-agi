@@ -1,31 +1,27 @@
 const Todo = require('./todo-model');
 const _ = require('lodash');
 
-const params = (req, res, next, id) => {
-  Todo.findById(id)
-    .populate('author')
-    .exec()
-    .then(todo => {
-      if (!todo) {
-        next(new Error('No todo with that id'));
-      } else {
-        req.todo = todo;
-        next();
-      }
-    }, err => {
-      next(err);
-    });
+const params = async (req, res, next, id) => {
+  try {
+    const todo = await Todo.findById(id).populate('author').exec();
+    if (!todo) {
+      next(new Error('No todo with that id'));
+    } else {
+      req.todo = todo;
+      next();
+    }
+  } catch (error) {
+    next(error);
+  }
 };
 
-const get = (req, res, next) => {
-  Todo.find({})
-    .populate('author')
-    .exec()
-    .then(todos => {
-      res.json(todos);
-    }, err => {
-      next(err);
-    });
+const get = async (req, res, next) => {
+  try {
+    const todos = await Todo.find({}).populate('authors').exec();
+    res.json(todos);
+  } catch (error) {
+    next(error);
+  }
 };
 
 const getOne = (req, res) => {
@@ -33,38 +29,38 @@ const getOne = (req, res) => {
   res.json(todo);
 };
 
-const post = (req, res, next) => {
+const post = async (req, res, next) => {
   const newTodo = req.body;
-
-  Todo.create(newTodo)
-    .then(todo => {
-      res.json(todo);
-    }, err => {
-      next(err);
-    });
+  try {
+    const todo = await Todo.create(newTodo);
+    res.json(todo);
+  }
+  catch (error) {
+    next(error);
+  }
 };
 
-const put = (req, res, next) => {
+const put = async (req, res, next) => {
   const todo = req.todo;
   const update = req.body;
 
   _.merge(todo, update);
 
-  todo.save()
-    .then(saved => {
-      res.json(saved);
-    }, err => {
-      next(err);
-    });
+  try {
+    const saved = await todo.save();
+    res.json(saved);
+  } catch (error) {
+    next(error);
+  }
 };
 
-const deleteOne = (req, res, next) => {
-  req.todo.remove()
-    .then(removed => {
-      res.json(removed);
-    }, err => {
-      next(err);
-    });
+const deleteOne = async (req, res, next) => {
+  try {
+    const removed = await req.todo.remove();
+    res.json(removed);
+  } catch (error) {
+    next(error);
+  }
 };
 
 module.exports = {

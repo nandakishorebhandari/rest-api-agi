@@ -73,12 +73,11 @@ describe(infoLog('TODOS api'), () => {
           .get(`/api/todos/${todo._id}`)
           .expect('Content-Type', /json/)
           .expect(200)
-          .end((err, resp) => {
-            expect(resp.body).to.be.an('object');
-            expect(resp.body.title).to.equal(mockTodo.title);
-            expect(resp.body.description).to.equal(mockTodo.description);
-            expect(resp.body.duration).to.equal(mockTodo.duration);
-            expect(resp.body.author).to.equal(mockTodo.author.toString());
+          .end((err, newResp) => {
+            expect(newResp.body).to.be.an('object');
+            expect(newResp.body.title).to.equal(mockTodo.title);
+            expect(newResp.body.description).to.equal(mockTodo.description);
+            expect(newResp.body.duration).to.equal(mockTodo.duration);
             done();
           });
       });
@@ -93,6 +92,7 @@ describe(infoLog('TODOS api'), () => {
         const todo = resp.body;
         const updatedData = {
           title: 'Write Even Better Tests',
+          author: resp.body.author,
         };
         request(app)
           .put(`/api/todos/${todo._id}`)
@@ -100,11 +100,10 @@ describe(infoLog('TODOS api'), () => {
           .expect('Content-Type', /json/)
           .expect(200)
           .end((err, newResp) => {
-            expect(resp.body).to.be.an('object');
+            expect(newResp.body).to.be.an('object');
             expect(newResp.body.title).to.equal(updatedData.title);
-            expect(resp.body.description).to.equal(mockTodo.description);
-            expect(resp.body.duration).to.equal(mockTodo.duration);
-            expect(resp.body.author).to.equal(mockTodo.author.toString());
+            expect(newResp.body.description).to.equal(mockTodo.description);
+            expect(newResp.body.duration).to.equal(mockTodo.duration);
             done();
           });
       });
@@ -121,12 +120,11 @@ describe(infoLog('TODOS api'), () => {
           .delete(`/api/todos/${todo._id}`)
           .expect('Content-Type', /json/)
           .expect(200)
-          .end((err, resp) => {
-            expect(resp.body).to.be.an('object');
-            expect(resp.body.title).to.equal(mockTodo.title);
-            expect(resp.body.description).to.equal(mockTodo.description);
-            expect(resp.body.duration).to.equal(mockTodo.duration);
-            expect(resp.body.author).to.equal(mockTodo.author.toString());
+          .end((err, newResp) => {
+            expect(newResp.body).to.be.an('object');
+            expect(newResp.body.title).to.equal(mockTodo.title);
+            expect(newResp.body.description).to.equal(mockTodo.description);
+            expect(newResp.body.duration).to.equal(mockTodo.duration);
             done();
           });
       });
@@ -187,10 +185,10 @@ describe(infoLog('USERS api'), () => {
           .get(`/api/users/${user._id}`)
           .expect('Content-Type', /json/)
           .expect(200)
-          .end((err, resp) => {
-            expect(resp.body).to.be.an('object');
-            expect(resp.body.username).to.equal(mockUser.username);
-            expect(resp.body.password).to.equal(mockUser.password);
+          .end((err, newResp) => {
+            expect(newResp.body).to.be.an('object');
+            expect(newResp.body.username).to.equal(mockUser.username);
+            expect(newResp.body.password).to.equal(mockUser.password);
             done();
           });
       });
@@ -212,9 +210,9 @@ describe(infoLog('USERS api'), () => {
           .expect('Content-Type', /json/)
           .expect(200)
           .end((err, newResp) => {
-            expect(resp.body).to.be.an('object');
+            expect(newResp.body).to.be.an('object');
             expect(newResp.body.username).to.equal(updatedData.username);
-            expect(resp.body.password).to.equal(mockUser.password);
+            expect(newResp.body.password).to.equal(mockUser.password);
             done();
           });
       });
@@ -231,10 +229,10 @@ describe(infoLog('USERS api'), () => {
           .delete(`/api/users/${user._id}`)
           .expect('Content-Type', /json/)
           .expect(200)
-          .end((err, resp) => {
-            expect(resp.body).to.be.an('object');
-            expect(resp.body.username).to.equal(mockUser.username);
-            expect(resp.body.password).to.equal(mockUser.password);
+          .end((err, newResp) => {
+            expect(newResp.body).to.be.an('object');
+            expect(newResp.body.username).to.equal(mockUser.username);
+            expect(newResp.body.password).to.equal(mockUser.password);
             done();
           });
       });

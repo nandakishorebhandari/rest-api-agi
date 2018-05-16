@@ -10,8 +10,8 @@ router.route('/')
   .post(userController.post);
 
 router.route('/:id')
-  .get(userController.getOne)
-  .put(decodeToken(), getFreshUser(), userController.put)
-  .delete(decodeToken(), getFreshUser(), userController.delete);
+  .get(decodeToken(), getFreshUser(), userController.checkUser, userController.getOne)
+  .put(decodeToken(), getFreshUser(), userController.checkUser, userController.put)
+  .delete(decodeToken(), getFreshUser(), userController.checkUser, userController.delete);
 
 module.exports = router;

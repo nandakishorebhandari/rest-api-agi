@@ -7,7 +7,7 @@ const params = async (req, res, next, id) => {
     if (!todo) {
       return next(new Error('No todo with that id'));
     }
-    req.todo = todo;
+    req.paramTodo = todo;
     return next();
 
   } catch (error) {
@@ -25,7 +25,7 @@ const get = async (req, res, next) => {
 };
 
 const getOne = (req, res) => {
-  const todo = req.todo;
+  const todo = req.paramTodo;
   res.json(todo);
 };
 
@@ -42,7 +42,7 @@ const post = async (req, res, next) => {
 };
 
 const put = async (req, res, next) => {
-  const todo = req.todo;
+  const todo = req.paramTodo;
   const update = req.body;
 
   _.merge(todo, update);
@@ -57,7 +57,7 @@ const put = async (req, res, next) => {
 
 const deleteOne = async (req, res, next) => {
   try {
-    const removed = await req.todo.remove();
+    const removed = await req.paramTodo.remove();
     res.json(removed);
   } catch (error) {
     return next(error);
@@ -65,8 +65,8 @@ const deleteOne = async (req, res, next) => {
 };
 
 const checkAuthor = (req, res, next) => {
-  if(req.todo.author._id.toString() !== req.user._id.toString()) {
-    return next('UnAUTHORized entry');
+  if(req.paramTodo.author._id.toString() !== req.user._id.toString()) {
+    return next(new Error('UnAUTHORized entry'));
   }
   return next();
 };

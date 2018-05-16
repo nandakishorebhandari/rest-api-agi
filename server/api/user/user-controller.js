@@ -8,7 +8,7 @@ const params = async (req, res, next, id) => {
     if (!user) {
       next(new Error('No user with that id'));
     } else {
-      req.user = user;
+      req.paramUser = user;
       next();
     }
   } catch (error) {
@@ -26,7 +26,7 @@ const get = async (req, res, next) => {
 };
 
 const getOne = (req, res) => {
-  const user = req.user;
+  const user = req.paramUser;
   res.json(user.toJson());
 };
 
@@ -34,7 +34,7 @@ const post = async (req, res, next) => {
   const newUser = new User(req.body);
   try {
     const saved = await newUser.save();
-    const token = signToken(saved._id);
+    const token = await signToken(saved._id);
     res.json({ token, });
   } catch (error) {
     next(error);
@@ -42,7 +42,7 @@ const post = async (req, res, next) => {
 };
 
 const put = async (req, res, next) => {
-  const user = req.user;
+  const user = req.paramUser;
   const update = req.body;
 
   _.merge(user, update);
@@ -57,7 +57,7 @@ const put = async (req, res, next) => {
 
 const deleteOne = async (req, res, next) => {
   try {
-    const removed = await req.user.remove();
+    const removed = await req.paramUser.remove();
     res.json(removed.toJson());
   } catch (error) {
     next(error);
@@ -65,7 +65,14 @@ const deleteOne = async (req, res, next) => {
 };
 
 const me = (req, res) => {
-  res.json(req.user.toJson());
+  res.json(req.paramUser.toJson());
+};
+
+const checkUser = (req, res, next) => {
+  if(req.paramUser._id.toString() !== req.user._id.toString()) {
+    return next(new Error('UnAUTHORized entry'));
+  }
+  return next();
 };
 
 module.exports = {
@@ -76,4 +83,5 @@ module.exports = {
   put: put,
   delete: deleteOne,
   me: me,
+  checkUser,
 };

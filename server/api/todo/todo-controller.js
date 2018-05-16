@@ -9,7 +9,6 @@ const params = async (req, res, next, id) => {
     }
     req.paramTodo = todo;
     return next();
-
   } catch (error) {
     return next(error);
   }

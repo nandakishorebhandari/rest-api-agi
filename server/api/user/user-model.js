@@ -19,7 +19,7 @@ UserSchema.pre('save', function(next) {
     return next();
   }
   this.password = this.encryptPassword(this.password);
-  next();
+  return next();
 });
 
 

@@ -18,7 +18,7 @@ exports.getFreshUser = () => async (req, res, next) => {
       res.status(401).send('Unauthorized');
     } else {
       req.user = user;
-      next();
+      return next();
     }
   } catch (error) {
     return next(error);
@@ -35,11 +35,11 @@ exports.verifyUser = () => async (req, res, next) => {
         res.status(401).send('Wrong password');
       } else {
         req.user = user;
-        next();
+        return next();
       }
     }
   } catch (error) {
-    next(error);
+    return next(error);
   }
 };
 

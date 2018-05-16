@@ -6,7 +6,7 @@ router.param('id', userController.params);
 router.get('/me', decodeToken(), getFreshUser(), userController.me);
 
 router.route('/')
-  .get(userController.get)
+  //.get(userController.get)
   .post(userController.post);
 
 router.route('/:id')

@@ -72,11 +72,11 @@ const checkAuthor = (req, res, next) => {
 };
 
 module.exports = {
-  params: params,
-  get: get,
-  getOne: getOne,
-  post: post,
-  put: put,
-  delete: deleteOne,
+  params,
+  get,
+  getOne,
+  post,
+  put,
+  deleteOne,
   checkAuthor,
 };

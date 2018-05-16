@@ -76,12 +76,12 @@ const checkUser = (req, res, next) => {
 };
 
 module.exports = {
-  params: params,
-  get: get,
-  getOne: getOne,
-  post: post,
-  put: put,
-  delete: deleteOne,
-  me: me,
+  params,
+  get,
+  getOne,
+  post,
+  put,
+  deleteOne,
+  me,
   checkUser,
 };

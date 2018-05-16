@@ -11,6 +11,6 @@ router.route('/')
 router.route('/:id')
   .get(decodeToken(), getFreshUser(), todoController.checkAuthor, todoController.getOne)
   .put(decodeToken(), getFreshUser(), todoController.checkAuthor, todoController.put)
-  .delete(decodeToken(), getFreshUser(), todoController.checkAuthor, todoController.delete);
+  .delete(decodeToken(), getFreshUser(), todoController.checkAuthor, todoController.deleteOne);
 
 module.exports = router;

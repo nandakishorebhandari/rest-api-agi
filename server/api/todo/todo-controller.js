@@ -5,22 +5,22 @@ const params = async (req, res, next, id) => {
   try {
     const todo = await Todo.findById(id).populate('author', 'username').exec();
     if (!todo) {
-      next(new Error('No todo with that id'));
-    } else {
-      req.todo = todo;
-      next();
+      return next(new Error('No todo with that id'));
     }
+    req.todo = todo;
+    return next();
+
   } catch (error) {
-    next(error);
+    return next(error);
   }
 };
 
 const get = async (req, res, next) => {
   try {
-    const todos = await Todo.find({}).populate('author', 'username').exec();
+    const todos = await Todo.find({ author: { _id:  req.user._id, }, }).populate('author', 'username').exec();
     res.json(todos);
   } catch (error) {
-    next(error);
+    return next(error);
   }
 };
 
@@ -37,7 +37,7 @@ const post = async (req, res, next) => {
     res.json(todo);
   }
   catch (error) {
-    next(error);
+    return next(error);
   }
 };
 
@@ -51,7 +51,7 @@ const put = async (req, res, next) => {
     const saved = await todo.save();
     res.json(saved);
   } catch (error) {
-    next(error);
+    return next(error);
   }
 };
 
@@ -60,8 +60,15 @@ const deleteOne = async (req, res, next) => {
     const removed = await req.todo.remove();
     res.json(removed);
   } catch (error) {
-    next(error);
+    return next(error);
   }
+};
+
+const checkAuthor = (req, res, next) => {
+  if(req.todo.author._id.toString() !== req.user._id.toString()) {
+    return next('UnAUTHORized entry');
+  }
+  return next();
 };
 
 module.exports = {
@@ -71,4 +78,5 @@ module.exports = {
   post: post,
   put: put,
   delete: deleteOne,
+  checkAuthor,
 };

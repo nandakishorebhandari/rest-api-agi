@@ -5,12 +5,12 @@ const { decodeToken, getFreshUser, } = require('../../auth/auth');
 router.param('id', todoController.params);
 
 router.route('/')
-  .get(todoController.get)
+  .get(decodeToken(), getFreshUser(), todoController.get)
   .post(decodeToken(), getFreshUser(), todoController.post);
 
 router.route('/:id')
-  .get(decodeToken(), getFreshUser(), todoController.getOne)
-  .put(decodeToken(), getFreshUser(), todoController.put)
-  .delete(decodeToken(), getFreshUser(), todoController.delete);
+  .get(decodeToken(), getFreshUser(), todoController.checkAuthor, todoController.getOne)
+  .put(decodeToken(), getFreshUser(), todoController.checkAuthor, todoController.put)
+  .delete(decodeToken(), getFreshUser(), todoController.checkAuthor, todoController.delete);
 
 module.exports = router;

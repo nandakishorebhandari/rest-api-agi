@@ -11,7 +11,7 @@
     "test": "test"
   },
   "dependencies": {
-    "bcrypt": "^2.0.1",
+    "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.2",
     "chalk": "^2.4.1",
     "cors": "^2.8.4",

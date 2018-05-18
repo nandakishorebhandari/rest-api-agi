@@ -12,6 +12,6 @@ router.route('/')
 router.route('/:id')
   .get(decodeToken(), getFreshUser(), userController.checkUser, userController.getOne)
   .put(decodeToken(), getFreshUser(), userController.checkUser, userController.put)
-  .delete(decodeToken(), getFreshUser(), userController.checkUser, userController.delete);
+  .delete(decodeToken(), getFreshUser(), userController.checkUser, userController.deleteOne);
 
 module.exports = router;

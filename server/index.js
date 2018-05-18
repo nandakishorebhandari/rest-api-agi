@@ -10,7 +10,9 @@ const app = express();
 require('mongoose')
   .connect(config.db.url)
   .then(() => {
-    console.log(successLog('db connected\n'));
+    if(config.logging) {
+      console.log(successLog('db connected\n'));
+    }
   })
   .catch(err => {
     console.error(errorLog(`${err}\n`));

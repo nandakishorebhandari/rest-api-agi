@@ -64,7 +64,7 @@ const deleteOne = async (req, res, next) => {
 };
 
 const me = (req, res) => {
-  res.json(req.paramUser.toJson());
+  res.json(req.user.toJson());
 };
 
 const checkUser = (req, res, next) => {

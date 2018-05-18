@@ -15,15 +15,6 @@ const params = async (req, res, next, id) => {
   }
 };
 
-const get = async (req, res, next) => {
-  try {
-    const users = await User.find({}).select('-password').exec();
-    res.json(users.map(user => user.toJson()));
-  } catch (error) {
-    return next(error);
-  }
-};
-
 const getOne = (req, res) => {
   const user = req.paramUser;
   res.json(user.toJson());
@@ -76,7 +67,6 @@ const checkUser = (req, res, next) => {
 
 module.exports = {
   params,
-  get,
   getOne,
   post,
   put,

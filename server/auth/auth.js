@@ -15,7 +15,7 @@ exports.getFreshUser = () => async (req, res, next) => {
   try {
     const user = await User.findById(req.user._id);
     if (!user) {
-      res.status(401).send('Unauthorized');
+      return next(new Error('Unauthorized'));
     } else {
       req.user = user;
       return next();
@@ -29,10 +29,10 @@ exports.verifyUser = () => async (req, res, next) => {
   try {
     const user = await User.findOne({ username: req.body.username, });
     if (!user) {
-      res.status(401).send('No user with the given username');
+      return next(new Error('Wrong credentials'));
     } else {
       if (!user.authenticate(req.body.password)) {
-        res.status(401).send('Wrong password');
+        return next(new Error('Wrong credentials'));
       } else {
         req.user = user;
         return next();

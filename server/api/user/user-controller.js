@@ -6,7 +6,7 @@ const params = async (req, res, next, id) => {
   try {
     const user = await User.findById(id).select('-password').exec();
     if (!user) {
-      return next(new Error('No user with that id'));
+      return next(new Error('Unauthorized'));
     }
     req.paramUser = user;
     return next();
@@ -17,7 +17,7 @@ const params = async (req, res, next, id) => {
 
 const getOne = (req, res) => {
   const user = req.paramUser;
-  res.json(user.toJson());
+  res.status(200).json(user.toJson());
 };
 
 const post = async (req, res, next) => {
@@ -25,7 +25,7 @@ const post = async (req, res, next) => {
   try {
     const saved = await newUser.save();
     const token = await signToken(saved._id);
-    res.json({ token, });
+    res.status(200).json({ token, });
   } catch (error) {
     return next(error);
   }
@@ -39,7 +39,7 @@ const put = async (req, res, next) => {
 
   try {
     const saved = await user.save();
-    res.json(saved.toJson());
+    res.status(200).json(saved.toJson());
   } catch (error) {
     return next(error);
   }
@@ -48,19 +48,19 @@ const put = async (req, res, next) => {
 const deleteOne = async (req, res, next) => {
   try {
     const removed = await req.paramUser.remove();
-    res.json(removed.toJson());
+    res.status(200).json(removed.toJson());
   } catch (error) {
     return next(error);
   }
 };
 
 const me = (req, res) => {
-  res.json(req.user.toJson());
+  res.status(200).json(req.user.toJson());
 };
 
 const checkUser = (req, res, next) => {
   if (req.paramUser._id.toString() !== req.user._id.toString()) {
-    return next(new Error('UnAUTHORized entry'));
+    return next(new Error('Unauthorized'));
   }
   return next();
 };

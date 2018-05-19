@@ -2,7 +2,7 @@ const { signToken, } = require('./auth');
 
 const signIn = (req, res) => {
   const token = signToken(req.user._id);
-  res.json({ token, });
+  res.status(200).json({ token, });
 };
 
 module.exports = {

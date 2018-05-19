@@ -5,7 +5,7 @@ const params = async (req, res, next, id) => {
   try {
     const todo = await Todo.findById(id).populate('author', 'username').exec();
     if (!todo) {
-      return next(new Error('No todo with that id'));
+      return next(new Error('Unauthorized'));
     }
     req.paramTodo = todo;
     return next();
@@ -17,7 +17,7 @@ const params = async (req, res, next, id) => {
 const get = async (req, res, next) => {
   try {
     const todos = await Todo.find({ author: { _id:  req.user._id, }, }).populate('author', 'username').exec();
-    res.json(todos);
+    res.status(200).json(todos);
   } catch (error) {
     return next(error);
   }
@@ -25,7 +25,7 @@ const get = async (req, res, next) => {
 
 const getOne = (req, res) => {
   const todo = req.paramTodo;
-  res.json(todo);
+  res.status(200).json(todo);
 };
 
 const post = async (req, res, next) => {
@@ -33,7 +33,7 @@ const post = async (req, res, next) => {
   newTodo.author = req.user._id;
   try {
     const todo = await Todo.create(newTodo);
-    res.json(todo);
+    res.status(200).json(todo);
   }
   catch (error) {
     return next(error);
@@ -48,7 +48,7 @@ const put = async (req, res, next) => {
 
   try {
     const saved = await todo.save();
-    res.json(saved);
+    res.status(200).json(saved);
   } catch (error) {
     return next(error);
   }
@@ -57,7 +57,7 @@ const put = async (req, res, next) => {
 const deleteOne = async (req, res, next) => {
   try {
     const removed = await req.paramTodo.remove();
-    res.json(removed);
+    res.status(200).json(removed);
   } catch (error) {
     return next(error);
   }
@@ -65,7 +65,7 @@ const deleteOne = async (req, res, next) => {
 
 const checkAuthor = (req, res, next) => {
   if(req.paramTodo.author._id.toString() !== req.user._id.toString()) {
-    return next(new Error('UnAUTHORized entry'));
+    return next(new Error('Unauthorized'));
   }
   return next();
 };

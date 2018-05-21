@@ -8,7 +8,6 @@ const Todo = require('../server/api/todo/todo-model');
 const User = require('../server/api/user/user-model');
 const { infoLog, errorLog, } = require('../server/utils/logger');
 
-/* eslint-disable no-undef */
 
 describe(infoLog('USERS'), () => {
 

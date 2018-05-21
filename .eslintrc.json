@@ -2,13 +2,14 @@
   "env": {
     "commonjs": true,
     "es6": true,
-    "node": true
+    "node": true,
+    "mocha": true
   },
   "extends": [
     "eslint:recommended"
   ],
   "parserOptions": {
-    "ecmaVersion":8
+    "ecmaVersion": 8
   },
   "rules": {
     "indent": [

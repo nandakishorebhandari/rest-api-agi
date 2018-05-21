@@ -5,6 +5,7 @@ RESTful api in node.js for a ToDo application with [**JWT**](https://jwt.io/) au
 ## :rocket: Running on [Heroku](https://rest-api-agi.herokuapp.com) with CORS enabled :ballot_box_with_check:
 
 ### Available operations
+
 | Method | Route | Description |
 | :--- | :---: | :--- |
 | *POST* | `/auth/signin` | *log in* - if posted user exists send back his **token** |

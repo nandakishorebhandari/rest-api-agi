@@ -11,12 +11,20 @@ const { infoLog, errorLog, } = require('../server/utils/logger');
 
 describe(infoLog('USERS'), () => {
 
-  describe(infoLog('/api/users'), () => {
+  const mockUser = {
+    username: 'TesterTimmy',
+    password: 'test123',
+  };
 
-    const mockUser = {
-      username: 'TesterTimmy',
-      password: 'test123',
-    };
+  afterEach(() => {
+    User.remove({}, err => {
+      if (err) {
+        console.error(errorLog('Error while cleaning the Test DB'));
+      }
+    });
+  });
+
+  describe(infoLog('/api/users'), () => {
 
     it('should post a user', done => {
       request(app)
@@ -31,24 +39,58 @@ describe(infoLog('USERS'), () => {
           done();
         });
     });
+  });
 
-    after(() => {
-      User.remove({}, err => {
-        if (err) {
-          console.error(errorLog('Error while cleaning the Test DB'));
-        }
-      });
+  describe(infoLog('/api/users/usernames'), () => {
+
+    before(async () => {
+      const newUser = new User(mockUser);
+      try {
+        await newUser.save();
+      } catch (error) {
+        console.log(error);
+      }
+    });
+
+    it('should return false if username isn\'t available', done => {
+      request(app)
+        .post('/api/users/usernames')
+        .set('Accept', 'application/json')
+        .send(mockUser)
+        .expect('Content-Type', /json/)
+        .expect(200)
+        .end((err, resp) => {
+          expect(resp.body).to.be.an('object');
+          expect(resp.body.isUsernameAvailable).to.be.a('boolean');
+          expect(resp.body.isUsernameAvailable).to.equal(false);
+          done();
+        });
+    });
+
+    it('should return true if username is available', done => {
+
+      const fakeUser = {
+        username: 'AvailableUsername',
+      };
+
+      request(app)
+        .post('/api/users/usernames')
+        .set('Accept', 'application/json')
+        .send(fakeUser)
+        .expect('Content-Type', /json/)
+        .expect(200)
+        .end((err, resp) => {
+          expect(resp.body).to.be.an('object');
+          expect(resp.body.isUsernameAvailable).to.be.a('boolean');
+          expect(resp.body.isUsernameAvailable).to.equal(true);
+          done();
+        });
     });
   });
 
   describe(infoLog('/api/users/me'), () => {
 
     let token = null;
-
-    const mockUser = {
-      username: 'TesterTimmy',
-      password: 'test123',
-    };
 
     before(done => {
       request(app)
@@ -61,15 +103,7 @@ describe(infoLog('USERS'), () => {
         });
     });
 
-    after(() => {
-      User.remove({}, err => {
-        if (err) {
-          console.error(errorLog('Error while cleaning the Test DB'));
-        }
-      });
-    });
-
-    it('should get user on /api/users/me', done => {
+    it('should get owner of the token on /api/users/me', done => {
       request(app)
         .get('/api/users/me')
         .set('Accept', 'application/json')
@@ -87,11 +121,6 @@ describe(infoLog('USERS'), () => {
 
     let token = null;
     let user = null;
-
-    const mockUser = {
-      username: 'TesterTimmy',
-      password: 'test123',
-    };
 
     beforeEach(done => {
       request(app)
@@ -111,14 +140,6 @@ describe(infoLog('USERS'), () => {
         });
     });
 
-    afterEach(() => {
-      User.remove({}, err => {
-        if (err) {
-          console.error(errorLog('Error while cleaning the Test DB'));
-        }
-      });
-    });
-
     it('should get one user', done => {
       request(app)
         .get(`/api/users/${user._id}`)
@@ -131,7 +152,7 @@ describe(infoLog('USERS'), () => {
           expect(newResp.body.username).to.equal(mockUser.username);
           done();
         });
-    }).timeout(5000);
+    });
 
     it('should put a user', done => {
       const updatedData = {
@@ -150,7 +171,7 @@ describe(infoLog('USERS'), () => {
           expect(newResp.body.username).to.equal(updatedData.username);
           done();
         });
-    }).timeout(5000);
+    });
 
     it('should delete a user', done => {
       request(app)
@@ -164,26 +185,103 @@ describe(infoLog('USERS'), () => {
           expect(newResp.body.username).to.equal(mockUser.username);
           done();
         });
-    }).timeout(5000);
+    });
   });
+});
+
+describe(infoLog('AUTH'), () => {
+
+  const mockUser = {
+    username: 'TesterTimmy',
+    password: 'test123',
+  };
+
+  const fakeUser = {
+    username: 'AvailableUsername',
+    password: 'whatever',
+  };
+
+  before(async () => {
+    const newUser = new User(mockUser);
+    try {
+      await newUser.save();
+    } catch (error) {
+      console.log(error);
+    }
+  });
+
+  after(() => {
+    User.remove({}, err => {
+      if (err) {
+        console.error(errorLog('Error while cleaning the Test DB'));
+      }
+    });
+  });
+
+  describe(infoLog('/signin'), () => {
+
+    it('should sign valid user in', done => {
+      request(app)
+        .post('/auth/signin')
+        .set('Accept', 'application/json')
+        .send(mockUser)
+        .expect('Content-Type', /json/)
+        .expect(200)
+        .end((err, resp) => {
+          expect(resp.body).to.be.an('object');
+          expect(resp.body.token).to.be.a('string');
+          done();
+        });
+    });
+
+    it('should not sign invalid user in', done => {
+      request(app)
+        .post('/auth/signin')
+        .set('Accept', 'application/json')
+        .send(fakeUser)
+        .expect('Content-Type', /json/)
+        .expect(200)
+        .end((err, resp) => {
+          expect(resp.body).to.be.an('object');
+          expect(resp.body.error).to.be.a('string');
+          done();
+        });
+    });
+  });
+
 });
 
 describe(infoLog('TODOS'), () => {
 
+  const mockUser = {
+    username: 'TesterTimmy',
+    password: 'test123',
+  };
+
+  const mockTodo = {
+    'title': 'Write Better Tests',
+    'description': 'I have to learn how to write better tests.',
+    'duration': 1000,
+    'date': '2018-05-22T22:00:00.000Z',
+  };
+
+
+  afterEach(() => {
+    Todo.remove({}, err => {
+      if (err) {
+        console.error(errorLog('Error while cleaning the Test DB'));
+      }
+    });
+
+    User.remove({}, err => {
+      if (err) {
+        console.error(errorLog('Error while cleaning the Test DB'));
+      }
+    });
+  });
+
   describe(infoLog('/api/todos'), () => {
     let token = null;
-
-    const mockUser = {
-      username: 'TesterTimmy',
-      password: 'test123',
-    };
-
-    const mockTodo = {
-      'title': 'Write Better Tests',
-      'description': 'I have to learn how to write better tests.',
-      'duration': 1000,
-      'date': '2018-05-22T22:00:00.000Z',
-    };
 
     beforeEach(done => {
       request(app)
@@ -194,20 +292,6 @@ describe(infoLog('TODOS'), () => {
           token = resp.body.token;
           done();
         });
-    });
-
-    afterEach(() => {
-      Todo.remove({}, err => {
-        if (err) {
-          console.error(errorLog('Error while cleaning the Test DB'));
-        }
-      });
-
-      User.remove({}, err => {
-        if (err) {
-          console.error(errorLog('Error while cleaning the Test DB'));
-        }
-      });
     });
 
     it('should post a todo', done => {
@@ -239,25 +323,13 @@ describe(infoLog('TODOS'), () => {
           expect(resp.body.length).to.equal(0);
           done();
         });
-    }).timeout(5000);
+    });
   });
 
   describe(infoLog('/api/todos/:id'), () => {
 
     let token = null;
     let todo = null;
-
-    const mockUser = {
-      username: 'TesterTimmy',
-      password: 'test123',
-    };
-
-    const mockTodo = {
-      'title': 'Write Better Tests',
-      'description': 'I have to learn how to write better tests.',
-      'duration': 1000,
-      'date': '2018-05-22T22:00:00.000Z',
-    };
 
     beforeEach(done => {
       request(app)
@@ -278,20 +350,6 @@ describe(infoLog('TODOS'), () => {
         });
     });
 
-    afterEach(() => {
-      Todo.remove({}, err => {
-        if (err) {
-          console.error(errorLog('Error while cleaning the Test DB'));
-        }
-      });
-
-      User.remove({}, err => {
-        if (err) {
-          console.error(errorLog('Error while cleaning the Test DB'));
-        }
-      });
-    });
-
     it('should get one todo', done => {
       request(app)
         .get(`/api/todos/${todo._id}`)
@@ -306,7 +364,7 @@ describe(infoLog('TODOS'), () => {
           expect(newResp.body.duration).to.equal(mockTodo.duration);
           done();
         });
-    }).timeout(5000);
+    });
 
     it('should put a todo', done => {
       const updatedData = {
@@ -326,7 +384,7 @@ describe(infoLog('TODOS'), () => {
           expect(newResp.body.duration).to.equal(mockTodo.duration);
           done();
         });
-    }).timeout(5000);
+    });
 
     it('should delete a todo', done => {
       request(app)
@@ -342,6 +400,6 @@ describe(infoLog('TODOS'), () => {
           expect(newResp.body.duration).to.equal(mockTodo.duration);
           done();
         });
-    }).timeout(5000);
+    });
   });
 });

@@ -54,6 +54,19 @@ const deleteOne = async (req, res, next) => {
   }
 };
 
+const isUsernameAvailable = async (req, res, next) => {
+  try {
+    const user = await User.findOne({ username: req.body.username, }).select('-password').exec();
+    if (!user) {
+      res.status(200).json({ isUsernameAvailable: true, });
+    } else {
+      res.status(200).json({ isUsernameAvailable: false, });
+    }
+  } catch (error) {
+    return next(error);
+  }
+};
+
 const me = (req, res) => {
   res.status(200).json(req.user.toJson());
 };
@@ -73,4 +86,5 @@ module.exports = {
   deleteOne,
   me,
   checkUser,
+  isUsernameAvailable,
 };

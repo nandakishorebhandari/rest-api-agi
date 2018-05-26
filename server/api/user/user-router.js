@@ -8,6 +8,9 @@ router.get('/me', decodeToken(), getFreshUser(), userController.me);
 router.route('/')
   .post(userController.post);
 
+router.route('/usernames')
+  .post(userController.isUsernameAvailable);
+
 router.route('/:id')
   .get(decodeToken(), getFreshUser(), userController.checkUser, userController.getOne)
   .put(decodeToken(), getFreshUser(), userController.checkUser, userController.put)

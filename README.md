@@ -10,6 +10,7 @@ RESTful api in node.js for a ToDo application with [**JWT**](https://jwt.io/) au
 | :--- | :---: | :--- |
 | *POST* | `/auth/signin` | *log in* - if posted user exists send back his **token** |
 | *POST* | `/api/users` | *register* new user and send back his **token** |
+| *POST* | `/api/users/usernames` | *send* a username and check if it isn't already in use |
 | *GET* | `/api/users/:id` | *read* your profile's data if you have a valid **token** |
 | *PUT* | `/api/users/:id` | *update* your profile's information if you have a valid **token** |
 | *DELETE* | `/api/users/:id` | *destroy* your profile if you have a valid **token** |
